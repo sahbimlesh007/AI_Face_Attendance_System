@@ -1,107 +1,46 @@
-from flask import Flask, render_template, Response, redirect
-import pandas as pd
-import os
-import cv2
-
-app = Flask(__name__)
-
-camera = cv2.VideoCapture(0)
-
-
-# ================= DASHBOARD =================
 @app.route("/")
 def dashboard():
+    if "user" not in session:
+        return redirect("/login")
 
-    df = pd.read_csv("attendance/attendance.csv")
+    # Load master student list
+    students_df = pd.read_csv("attendance/students.csv")  # ID, Name
 
-    total_students = df["Name"].nunique()
-    total_attendance = len(df)
+    # Load attendance CSV
+    try:
+        attendance_df = pd.read_csv("attendance/attendance.csv", header=None)
+        attendance_df.columns = ["ID", "Name", "Date", "Time"]
 
-    table = df.to_html(classes="table table-striped", index=False)
+        # Convert Time to datetime.time
+        attendance_df["Time"] = pd.to_datetime(attendance_df["Time"]).dt.time
 
-    return render_template(
-        "dashboard.html",
-        table=table,
-        students=total_students,
-        attendance=total_attendance
-    )
+        # Filter attendance between 08:30 and 09:30
+        start_time = time(8, 30)
+        end_time = time(9, 30)
+        attendance_window = attendance_df[
+            (attendance_df["Time"] >= start_time) &
+            (attendance_df["Time"] <= end_time)
+        ]
 
+        # List of students present in time window
+        present_students = attendance_window["Name"].tolist()
+    except FileNotFoundError:
+        present_students = []
 
-# ================= LIVE CAMERA =================
-def generate_frames():
-    while True:
+    # Build table HTML with Status column
+    table_html = '<table class="data">'
+    table_html += "<tr><th>ID</th><th>Name</th><th>Status</th></tr>"
 
-        success, frame = camera.read()
-
-        if not success:
-            break
-
+    for _, row in students_df.iterrows():
+        student_id = row["ID"]
+        name = row["Name"]
+        if name in present_students:
+            status = "Present"
+            color = "green"
         else:
-            ret, buffer = cv2.imencode(".jpg", frame)
-            frame = buffer.tobytes()
+            status = "Absent"
+            color = "red"
+        table_html += f'<tr><td>{student_id}</td><td>{name}</td><td style="color:{color}; font-weight:bold">{status}</td></tr>'
+    table_html += "</table>"
 
-        yield (b'--frame\r\n'
-               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
-
-
-@app.route("/video")
-def video():
-    return Response(generate_frames(),
-                    mimetype='multipart/x-mixed-replace; boundary=frame')
-
-
-# ================= REGISTER =================
-@app.route("/register")
-def register():
-    os.system("python capture_face.py")
-    return redirect("/")
-
-
-# ================= TRAIN =================
-@app.route("/train")
-def train():
-    os.system("python train_model.py")
-    return redirect("/")
-
-
-# ================= START ATTENDANCE =================
-@app.route("/start")
-def start():
-    os.system("python face_recognition_system.py")
-    return redirect("/")
-
-
-# ================= ANALYTICS =================
-@app.route("/analytics")
-def analytics():
-
-    df = pd.read_csv("attendance/attendance.csv")
-
-    data = df["Name"].value_counts()
-
-    labels = list(data.index)
-    values = list(data.values)
-
-    return render_template(
-        "analytics.html",
-        labels=labels,
-        values=values
-    )
-
-
-# ================= STUDENTS =================
-@app.route("/students")
-def students():
-
-    df = pd.read_csv("attendance/attendance.csv")
-
-    students = df["Name"].unique()
-
-    return render_template(
-        "students.html",
-        students=students
-    )
-
-
-if __name__ == "__main__":
-    app.run(debug=True)
+    return render_template("dashboard.html", table=table_html)

@@ -12,11 +12,15 @@
 
 <h2>Admin Login</h2>
 
-<form method="POST">
+{% if error %}
+<p style="color:red; text-align:center;">{{ error }}</p>
+{% endif %}
 
-<input type="text" name="username" placeholder="Username">
+<form method="POST" action="/login">
 
-<input type="password" name="password" placeholder="Password">
+<input type="text" name="username" placeholder="Username" required>
+
+<input type="password" name="password" placeholder="Password" required>
 
 <button type="submit">Login</button>
 

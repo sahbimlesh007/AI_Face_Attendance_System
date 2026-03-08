@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Absent Students</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="absent-box">
+        <h2>Absent Students from {{ start }} to {{ end }}</h2>
+
+        {% if absent_students %}
+        <ul>
+            {% for student in absent_students %}
+                <li>{{ student }}</li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>No absent students</p>
+        {% endif %}
+
+        <button onclick="window.location='/'">Back to Dashboard</button>
+    </div>
+</body>
+</html>

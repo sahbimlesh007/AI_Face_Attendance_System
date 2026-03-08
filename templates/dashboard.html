@@ -8,6 +8,44 @@
 <link rel="stylesheet" href="/static/css/style.css">
 <script src="/static/js/script.js" defer></script>
 
+<style>
+/* ---------- Table Styling ---------- */
+.table-container table {
+    border-collapse: collapse;
+    width: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.table-container th, .table-container td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+.table-container th {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.table-container tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.table-container tr:hover {
+    background-color: #f1f1f1;
+}
+
+.status-present {
+    color: green;
+    font-weight: bold;
+}
+
+.status-absent {
+    color: red;
+    font-weight: bold;
+}
+</style>
+
 </head>
 
 <body>
@@ -59,7 +97,27 @@
 <h2>Attendance Records</h2>
 
 <div class="table-container">
-{{ table | safe }}
+<!-- Updated table rendering with status colors -->
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in students %}
+        <tr>
+            <td>{{ row.ID }}</td>
+            <td>{{ row.Name }}</td>
+            <td class="{% if row.Status == 'Present' %}status-present{% else %}status-absent{% endif %}">
+                {{ row.Status }}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 </div>
 
 </div>
