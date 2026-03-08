@@ -2,19 +2,27 @@
 <html>
 
 <head>
-<title>Login</title>
+<title>Admin Login</title>
 <link rel="stylesheet" href="/static/css/style.css">
 </head>
 
-<body>
+<body class="login-page">
+
+<div class="login-box">
 
 <h2>Admin Login</h2>
 
-<input type="text" placeholder="Username"><br><br>
+<form method="POST">
 
-<input type="password" placeholder="Password"><br><br>
+<input type="text" name="username" placeholder="Username">
 
-<button>Login</button>
+<input type="password" name="password" placeholder="Password">
+
+<button type="submit">Login</button>
+
+</form>
+
+</div>
 
 </body>
 </html>

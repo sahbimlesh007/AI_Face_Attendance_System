@@ -6,3 +6,5 @@ flask
 mysql-connector-python
 pillow
 matplotlib
+cmake
+dlib

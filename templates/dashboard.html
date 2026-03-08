@@ -1,16 +1,70 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-<title>Dashboard</title>
+<meta charset="UTF-8">
+<title>AI Attendance Dashboard</title>
+
 <link rel="stylesheet" href="/static/css/style.css">
+<script src="/static/js/script.js" defer></script>
+
 </head>
 
 <body>
 
-<h2>Attendance Dashboard</h2>
+<div class="sidebar">
 
+<h2>AI Attendance</h2>
+
+<a href="/">Dashboard</a>
+<a href="/register">Register Student</a>
+<a href="/train">Train Model</a>
+<a href="/start">Start Attendance</a>
+<a href="/analytics">Analytics</a>
+
+</div>
+
+<div class="main">
+
+<header>
+<h1>AI Face Recognition Attendance</h1>
+</header>
+
+<div class="card-container">
+
+<a href="/register" class="card">
+<div class="icon">👤</div>
+<h3>Register Student</h3>
+</a>
+
+<a href="/train" class="card">
+<div class="icon">🧠</div>
+<h3>Train Model</h3>
+</a>
+
+<a href="/start" class="card">
+<div class="icon">📷</div>
+<h3>Start Attendance</h3>
+</a>
+
+<a href="/analytics" class="card">
+<div class="icon">📊</div>
+<h3>Analytics</h3>
+</a>
+
+</div>
+
+<div class="table-section">
+
+<h2>Attendance Records</h2>
+
+<div class="table-container">
 {{ table | safe }}
+</div>
+
+</div>
+
+</div>
 
 </body>
 </html>

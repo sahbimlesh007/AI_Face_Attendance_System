@@ -21,7 +21,7 @@ EMAIL_ADDRESS = "sahbimlesh9@gmail.com"
 # ===== CHANGE THIS =====
 # Put your Gmail
 
-EMAIL_PASSWORD = "sahbimlesh9@.com"
+EMAIL_PASSWORD = "dpfddjvdmjagynzi"
 # ===== CHANGE THIS =====
 # Use Gmail App Password
 

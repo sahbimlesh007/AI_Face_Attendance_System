@@ -10,6 +10,7 @@ def capture_student():
     db = connect()
     cursor = db.cursor()
 
+
     cursor.execute(
         "INSERT INTO students (id,name) VALUES (%s,%s)",
         (student_id,name)
@@ -57,3 +58,10 @@ def capture_student():
     cv2.destroyAllWindows()
 
     print("Student Registered Successfully")
+
+
+if __name__ == "__main__":
+    capture_student()
+
+# import cv2
+# print(cv2.__version__)
